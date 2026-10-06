@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cooking Robots — Instagram Reel (1080×1920)</title>
+<style>
+  @font-face { font-family: "Manrope"; font-weight: 400; src: url("fonts/Manrope-400.ttf") format("truetype"); }
+  @font-face { font-family: "Manrope"; font-weight: 500; src: url("fonts/Manrope-500.ttf") format("truetype"); }
+  @font-face { font-family: "Manrope"; font-weight: 600; src: url("fonts/Manrope-600.ttf") format("truetype"); }
+  @font-face { font-family: "Manrope"; font-weight: 700; src: url("fonts/Manrope-700.ttf") format("truetype"); }
+  @font-face { font-family: "Manrope"; font-weight: 800; src: url("fonts/Manrope-800.ttf") format("truetype"); }
+
+  :root {
+    /* Cooking Robots design system — extracted from cooking-robots.com */
+    --blue: #1156C5;
+    --navy: #0F172A;
+    --navy-ink: #122347;
+    --crimson: #BE123C;
+    --ink: #1F2328;
+    --ink-60: rgba(31,35,40,.6);
+    --off-white: #FBFBFB;
+    --white: #FFFFFF;
+    --blue-chip: #E8EFFB;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #000; }
+  body { font-family: "Manrope", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--navy); }
+  .scene { position: absolute; inset: 0; display: none; overflow: hidden; }
+  .scene.on { display: block; }
+  .bg { position: absolute; inset: 0; }
+  .bg.navy { background: var(--navy); }
+  .bg.off { background: var(--off-white); }
+  .bg.blue { background: var(--blue); }
+  .glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%,-50%);
+          background: radial-gradient(circle, rgba(17,86,197,.55) 0%, rgba(17,86,197,0) 62%); }
+  .glow.soft { background: radial-gradient(circle, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 60%); }
+
+  .eyebrow { position: absolute; left: 90px; display: flex; align-items: center; gap: 18px;
+             font-size: 28px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+  .eyebrow .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--blue); }
+  .eyebrow.light { color: rgba(255,255,255,.8); }
+  .eyebrow.light .dot { background: #6B9BFF; }
+  .eyebrow.dark { color: var(--blue); }
+  .eyebrow.white { color: rgba(255,255,255,.85); }
+  .eyebrow.white .dot { background: #fff; }
+
+  .h-xl { font-size: 150px; line-height: .98; font-weight: 800; letter-spacing: -.035em; }
+  .h-l  { font-size: 118px; line-height: 1.0; font-weight: 800; letter-spacing: -.03em; }
+  .h-m  { font-size: 96px; line-height: 1.02; font-weight: 800; letter-spacing: -.028em; }
+  .white { color: #fff; }
+  .muted-w { color: rgba(255,255,255,.72); }
+  .line { position: relative; }
+  .will { will-change: transform, opacity; }
+
+  .pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 60px; font-weight: 700; }
+  .pill.blue { background: var(--blue); color: #fff; }
+  .pill.outline { border: 3px solid rgba(255,255,255,.7); color: #fff; }
+  .pill.light { background: var(--blue-chip); color: var(--blue); }
+
+  .card { position: absolute; left: 90px; width: 900px; background: #fff; border-radius: 14px;
+          border: 1px solid rgba(31,35,40,.08); box-shadow: 8px 8px 0 rgba(15,23,42,.10);
+          padding: 44px 48px; display: flex; align-items: center; gap: 36px; }
+  .card .num { flex: 0 0 auto; width: 96px; height: 96px; border-radius: 50%; background: var(--blue-chip); color: var(--blue);
+               display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 800; }
+  .card .name { font-size: 54px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); line-height: 1.05; }
+  .card .spec { margin-top: 10px; font-size: 32px; font-weight: 500; color: var(--ink-60); }
+  .card .tag { margin-left: auto; flex: 0 0 auto; font-size: 22px; letter-spacing: .18em; text-transform: uppercase; font-weight: 700;
+               color: var(--blue); border: 2px solid var(--blue); border-radius: 60px; padding: 12px 22px; }
+
+  .chip { position: absolute; display: flex; align-items: center; gap: 20px; background: #fff; border: 1px solid rgba(31,35,40,.10);
+          border-radius: 60px; padding: 22px 34px 22px 22px; box-shadow: 6px 6px 0 rgba(15,23,42,.08); white-space: nowrap; }
+  .chip .ic { width: 64px; height: 64px; border-radius: 50%; background: var(--blue-chip); display: flex; align-items: center; justify-content: center; }
+  .chip .ic svg { width: 32px; height: 32px; stroke: var(--blue); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .chip .t { font-size: 31px; font-weight: 600; color: var(--ink); }
+
+  .quote { position: absolute; left: 90px; width: 900px; background: var(--navy); color: #fff; border-radius: 24px; padding: 54px 56px; }
+  .quote .q { font-size: 40px; line-height: 1.32; font-weight: 600; letter-spacing: -.01em; }
+  .quote .who { margin-top: 26px; font-size: 26px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.62); }
+  .stars { display: inline-flex; gap: 6px; }
+  .stars svg { width: 34px; height: 34px; fill: #F5B301; }
+
+  .badge { position: absolute; background: var(--crimson); color: #fff; border-radius: 60px; padding: 24px 46px;
+           font-size: 56px; font-weight: 800; letter-spacing: -.01em; box-shadow: 8px 8px 0 rgba(15,23,42,.14); }
+  .bigghost { position: absolute; left: -40px; right: -40px; text-align: center; font-size: 300px; font-weight: 800; letter-spacing: -.05em;
+              color: rgba(255,255,255,.05); line-height: 1; white-space: nowrap; }
+  .rule { position: absolute; left: 90px; height: 10px; width: 220px; background: var(--blue); border-radius: 10px; transform-origin: left center; }
+  .rule.white { background: #fff; }
+  .foot { position: absolute; left: 90px; right: 90px; font-size: 30px; font-weight: 600; }
+  .foot.light { color: rgba(255,255,255,.62); }
+  .foot.dark { color: var(--ink-60); }
+  .underline { position: absolute; left: 0; bottom: -6px; height: 16px; width: 100%; background: var(--blue); border-radius: 8px; transform-origin: left center; }
+  .counter { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1 — HOOK -->
+  <section class="scene" id="s1" style="z-index:1">
+    <div class="bg navy"></div>
+    <div class="glow" id="s1glow" style="top:78%"></div>
+    <div class="eyebrow light" id="s1eye" style="top:250px"><span class="dot"></span>Cooking Robots</div>
+    <div style="position:absolute; left:90px; top:640px;" class="h-xl white">
+      <div class="line will s1l">Still prepping</div>
+      <div class="line will s1l">everything</div>
+      <div class="line will s1l" style="display:inline-block; position:relative;">by hand?<span class="underline" id="s1u"></span></div>
+    </div>
+    <div class="foot light will" id="s1foot" style="top:1340px">Commercial kitchen automation<br>Installed &amp; supported in the U.S.</div>
+  </section>
+
+  <!-- S2 — LINEUP -->
+  <section class="scene" id="s2" style="z-index:2">
+    <div class="bg off"></div>
+    <div class="eyebrow dark will" id="s2eye" style="top:250px"><span class="dot"></span>The lineup</div>
+    <div class="h-l will" id="s2h" style="position:absolute; left:90px; top:318px; color:var(--ink)">Meet the<br>robots.</div>
+    <div class="card will s2c" style="top:640px">
+      <div class="num">01</div>
+      <div><div class="name">Roboroller Deluxe</div><div class="spec">Kimbap rolling · 250+ rolls / hr</div></div>
+      <div class="tag">Rolling</div>
+    </div>
+    <div class="card will s2c" style="top:900px">
+      <div class="num">02</div>
+      <div><div class="name">Slice Pro</div><div class="spec">Uniform slices at high volume</div></div>
+      <div class="tag">Slicing</div>
+    </div>
+    <div class="card will s2c" style="top:1160px">
+      <div class="num">03</div>
+      <div><div class="name">Hauscook Ramen Cooker</div><div class="spec">Ramen, cooked automatically</div></div>
+      <div class="tag">Cooking</div>
+    </div>
+    <div class="foot dark will" id="s2foot" style="top:1440px">ETL certified · Installed and trained by our U.S. team</div>
+  </section>
+
+  <!-- S3 — VALUE -->
+  <section class="scene" id="s3" style="z-index:3">
+    <div class="bg blue"></div>
+    <div class="glow soft" style="top:30%"></div>
+    <div class="eyebrow white will" id="s3eye" style="top:250px"><span class="dot"></span>Why operators switch</div>
+    <div style="position:absolute; left:90px; top:560px;" class="h-xl white">
+      <div class="line will s3l">More output.</div>
+      <div class="line will s3l">Same quality.</div>
+      <div class="line will s3l" style="display:inline-block; position:relative;">No new hires.<span class="underline" id="s3u" style="background:#fff"></span></div>
+    </div>
+    <div class="foot will" id="s3foot" style="top:1260px; color:rgba(255,255,255,.82); font-size:36px; font-weight:500; line-height:1.4">Increase efficiency and keep consistent quality — without hiring more staff.</div>
+  </section>
+
+  <!-- S4 — TRUST -->
+  <section class="scene" id="s4" style="z-index:4">
+    <div class="bg off"></div>
+    <div class="eyebrow dark will" id="s4eye" style="top:250px"><span class="dot"></span>Built for real kitchens</div>
+    <div class="h-m will" id="s4h" style="position:absolute; left:90px; top:318px; color:var(--ink)">Trusted by<br>300+ restaurants.</div>
+
+    <div class="chip will s4chip" style="left:90px; top:600px"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="t">ETL Certified</div></div>
+    <div class="chip will s4chip" style="left:560px; top:600px"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 10h18M5 10V7a2 2 0 012-2h10a2 2 0 012 2v3M4 10v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><path d="M9 14h6"/></svg></div><div class="t">U.S.-Based Support</div></div>
+    <div class="chip will s4chip" style="left:90px; top:730px"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 005.4-5.4l-2.4 2.4-2.2-.6-.6-2.2 2.2-2.6z"/></svg></div><div class="t">Fast &amp; Professional Installation</div></div>
+    <div class="chip will s4chip" style="left:90px; top:860px"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></div><div class="t">36 Months Financing Available</div></div>
+    <div class="chip will s4chip" style="left:90px; top:990px"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3z"/></svg></div><div class="t">4.9 / 5 on Trustpilot &nbsp;<span class="stars"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.6 7 .8-5.2 4.9 1.4 7L12 17.8 5.8 21.3l1.4-7L2 9.4l7-.8L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3 6.6 7 .8-5.2 4.9 1.4 7L12 17.8 5.8 21.3l1.4-7L2 9.4l7-.8L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3 6.6 7 .8-5.2 4.9 1.4 7L12 17.8 5.8 21.3l1.4-7L2 9.4l7-.8L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3 6.6 7 .8-5.2 4.9 1.4 7L12 17.8 5.8 21.3l1.4-7L2 9.4l7-.8L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3 6.6 7 .8-5.2 4.9 1.4 7L12 17.8 5.8 21.3l1.4-7L2 9.4l7-.8L12 2z"/></svg></span></div></div>
+
+    <div class="quote will" id="s4q" style="top:1150px">
+      <div class="q">“After installing the cooking robot, our production increased noticeably without compromising quality.”</div>
+      <div class="who">Sushi restaurant owner · New Jersey</div>
+    </div>
+  </section>
+
+  <!-- S5 — PROOF -->
+  <section class="scene" id="s5" style="z-index:5">
+    <div class="bg navy"></div>
+    <div class="glow" style="top:40%"></div>
+    <div class="bigghost will" id="s5ghost" style="top:1500px">US OPEN</div>
+    <div class="eyebrow light will" id="s5eye" style="top:250px"><span class="dot"></span>Featured story</div>
+    <div class="h-xl white will" id="s5h" style="position:absolute; left:90px; top:640px">2026<br>US Open</div>
+    <div class="rule will" id="s5rule" style="top:1010px"></div>
+    <div class="foot will" id="s5sub" style="top:1070px; color:#fff; font-size:44px; font-weight:600; line-height:1.3; letter-spacing:-.01em">High-volume kimbap prep,<br>in live service.</div>
+    <div class="will" id="s5pills" style="position:absolute; left:90px; top:1280px; display:flex; gap:18px">
+      <span class="pill outline" style="padding:18px 34px; font-size:30px">Roboroller Deluxe</span>
+      <span class="pill outline" style="padding:18px 34px; font-size:30px">Slice Pro</span>
+    </div>
+  </section>
+
+  <!-- S6 — OFFER -->
+  <section class="scene" id="s6" style="z-index:6">
+    <div class="bg off"></div>
+    <div class="eyebrow dark will" id="s6eye" style="top:250px"><span class="dot"></span>Special bundle offer</div>
+    <div class="badge will" id="s6badge" style="left:90px; top:360px">Save $1,000</div>
+    <div class="h-m will" id="s6h" style="position:absolute; left:90px; top:540px; color:var(--ink)">Roboroller Deluxe<br>+ Slice Pro</div>
+    <div class="foot dark will" id="s6sub" style="top:800px; font-size:40px; font-weight:500; line-height:1.4; color:var(--ink-60)">Consistent prep for high-volume kitchens —<br>bundled with free installation support.</div>
+    <div class="will" id="s6chips" style="position:absolute; left:90px; top:1030px; display:flex; flex-direction:column; gap:20px; align-items:flex-start">
+      <span class="pill light" style="padding:20px 36px; font-size:32px">36 Months Financing Available</span>
+      <span class="pill light" style="padding:20px 36px; font-size:32px">Free installation support</span>
+      <span class="pill light" style="padding:20px 36px; font-size:32px">U.S.-based team</span>
+    </div>
+  </section>
+
+  <!-- S7 — CTA -->
+  <section class="scene" id="s7" style="z-index:7">
+    <div class="bg navy"></div>
+    <div class="glow" id="s7glow" style="top:62%"></div>
+    <div class="eyebrow light will" id="s7eye" style="top:250px"><span class="dot"></span>Cooking Robots</div>
+    <div class="h-l white will" id="s7h" style="position:absolute; left:90px; top:560px">Smarter<br>Kitchens.<br><span style="color:#6B9BFF">Better<br>Operations.</span></div>
+    <div class="will" id="s7btn" style="position:absolute; left:90px; top:1140px">
+      <span class="pill blue" style="padding:34px 64px; font-size:48px">Book a Free Demo</span>
+    </div>
+    <div class="foot will" id="s7url" style="top:1300px; color:#fff; font-size:44px; font-weight:700; letter-spacing:-.01em">cooking-robots.com</div>
+    <div class="foot light will" id="s7bio" style="top:1370px">Link in bio</div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- tiny deterministic timeline (t in seconds) ---------- */
+const EASE = {
+  lin: t => t,
+  out: t => 1 - Math.pow(1 - t, 3),
+  in:  t => t * t * t,
+  inout: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  back: t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); },
+  expo: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t),
+};
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const tweens = [];
+const scenes = [];
+function $(sel) { return typeof sel === 'string' ? [...document.querySelectorAll(sel)] : [sel]; }
+/* tw(target, start, dur, from, to, ease, stagger) — props: o, x, y, s, r, sx */
+function tw(sel, start, dur, from, to, ease = 'out', stagger = 0) {
+  $(sel).forEach((el, i) => tweens.push({ el, start: start + i * stagger, dur, from, to, ease }));
+}
+function scene(id, start, end) { scenes.push({ el: document.getElementById(id), start, end }); }
+const DEFAULTS = { o: 1, x: 0, y: 0, s: 1, r: 0, sx: 1 };
+
+function render(t) {
+  for (const sc of scenes) sc.el.classList.toggle('on', t >= sc.start && t < sc.end);
+  const state = new Map();
+  for (const tw of tweens) {
+    let st = state.get(tw.el);
+    if (!st) { st = { ...DEFAULTS, seen: {} }; state.set(tw.el, st); }
+    const p = clamp((t - tw.start) / tw.dur, 0, 1);
+    const e = EASE[tw.ease](p);
+    for (const k in tw.to) {
+      const from = (k in tw.from) ? tw.from[k] : st[k];
+      if (t < tw.start) { if (!st.seen[k]) st[k] = from; }
+      else { st[k] = from + (tw.to[k] - from) * e; }
+      st.seen[k] = true;
+    }
+  }
+  for (const [el, st] of state) {
+    el.style.opacity = st.o;
+    el.style.transform = `translate(${st.x}px, ${st.y}px) scale(${st.s * st.sx}, ${st.s}) rotate(${st.r}deg)`;
+  }
+  /* continuous effects */
+  const btn = document.getElementById('s7btn');
+  if (btn && t >= 23.4) { const pulse = 1 + 0.025 * Math.sin((t - 23.4) * 5.5); btn.style.transform += ` scale(${pulse})`; }
+}
+window.render = render;
+
+/* ---------- storyboard ---------- */
+/* Scene windows (s) */
+scene('s1', 0.0, 3.6);
+scene('s2', 3.0, 8.4);
+scene('s3', 7.8, 12.4);
+scene('s4', 11.8, 17.0);
+scene('s5', 16.4, 20.2);
+scene('s6', 19.6, 23.4);
+scene('s7', 22.8, 27.0);
+
+/* S1 — hook */
+tw('#s1eye', 0.1, 0.6, { o: 0, y: -20 }, { o: 1, y: 0 });
+tw('.s1l', 0.25, 0.7, { o: 0, y: 90 }, { o: 1, y: 0 }, 'expo', 0.16);
+tw('#s1u', 0.95, 0.5, { sx: 0 }, { sx: 1 }, 'expo');
+tw('#s1foot', 1.3, 0.6, { o: 0, y: 20 }, { o: 1, y: 0 });
+tw('#s1', 3.0, 0.6, { y: 0 }, { y: -140 }, 'inout');
+tw('#s1', 3.0, 0.6, { o: 1 }, { o: 0.0 }, 'in');
+
+/* S2 — lineup (slides up over S1) */
+tw('#s2', 3.0, 0.6, { y: 1920 }, { y: 0 }, 'expo');
+tw('#s2eye', 3.5, 0.5, { o: 0, y: -20 }, { o: 1, y: 0 });
+tw('#s2h', 3.55, 0.7, { o: 0, y: 60 }, { o: 1, y: 0 }, 'expo');
+tw('.s2c', 3.9, 0.7, { o: 0, x: 260 }, { o: 1, x: 0 }, 'back', 0.18);
+tw('#s2foot', 4.9, 0.5, { o: 0 }, { o: 1 });
+tw('#s2', 7.8, 0.6, { y: 0 }, { y: -140 }, 'inout');
+tw('#s2', 7.8, 0.6, { o: 1 }, { o: 0 }, 'in');
+
+/* S3 — value */
+tw('#s3', 7.8, 0.6, { y: 1920 }, { y: 0 }, 'expo');
+tw('#s3eye', 8.3, 0.5, { o: 0, y: -20 }, { o: 1, y: 0 });
+tw('.s3l', 8.4, 0.7, { o: 0, y: 90, s: .94 }, { o: 1, y: 0, s: 1 }, 'expo', 0.3);
+tw('#s3u', 9.5, 0.5, { sx: 0 }, { sx: 1 }, 'expo');
+tw('#s3foot', 9.8, 0.6, { o: 0, y: 20 }, { o: 1, y: 0 });
+tw('#s3', 11.8, 0.6, { y: 0 }, { y: -140 }, 'inout');
+tw('#s3', 11.8, 0.6, { o: 1 }, { o: 0 }, 'in');
+
+/* S4 — trust */
+tw('#s4', 11.8, 0.6, { y: 1920 }, { y: 0 }, 'expo');
+tw('#s4eye', 12.3, 0.5, { o: 0, y: -20 }, { o: 1, y: 0 });
+tw('#s4h', 12.35, 0.7, { o: 0, y: 60 }, { o: 1, y: 0 }, 'expo');
+tw('.s4chip', 12.8, 0.55, { o: 0, s: .6 }, { o: 1, s: 1 }, 'back', 0.13);
+tw('#s4q', 13.9, 0.7, { o: 0, y: 80 }, { o: 1, y: 0 }, 'expo');
+tw('#s4', 16.4, 0.6, { y: 0 }, { y: -140 }, 'inout');
+tw('#s4', 16.4, 0.6, { o: 1 }, { o: 0 }, 'in');
+
+/* S5 — proof */
+tw('#s5', 16.4, 0.6, { y: 1920 }, { y: 0 }, 'expo');
+tw('#s5ghost', 16.9, 2.8, { o: 0, x: 60 }, { o: 1, x: -60 }, 'lin');
+tw('#s5eye', 16.9, 0.5, { o: 0, y: -20 }, { o: 1, y: 0 });
+tw('#s5h', 17.0, 0.8, { o: 0, y: 90 }, { o: 1, y: 0 }, 'expo');
+tw('#s5rule', 17.5, 0.6, { sx: 0 }, { sx: 1 }, 'expo');
+tw('#s5sub', 17.7, 0.6, { o: 0, y: 30 }, { o: 1, y: 0 });
+tw('#s5pills', 18.1, 0.6, { o: 0, y: 30 }, { o: 1, y: 0 }, 'back');
+tw('#s5', 19.6, 0.6, { y: 0 }, { y: -140 }, 'inout');
+tw('#s5', 19.6, 0.6, { o: 1 }, { o: 0 }, 'in');
+
+/* S6 — offer */
+tw('#s6', 19.6, 0.6, { y: 1920 }, { y: 0 }, 'expo');
+tw('#s6eye', 20.1, 0.5, { o: 0, y: -20 }, { o: 1, y: 0 });
+tw('#s6badge', 20.15, 0.6, { o: 0, s: .4, r: -14 }, { o: 1, s: 1, r: -4 }, 'back');
+tw('#s6h', 20.3, 0.7, { o: 0, y: 60 }, { o: 1, y: 0 }, 'expo');
+tw('#s6sub', 20.7, 0.6, { o: 0, y: 30 }, { o: 1, y: 0 });
+tw('#s6chips', 21.0, 0.6, { o: 0, y: 30 }, { o: 1, y: 0 }, 'back');
+tw('#s6', 22.8, 0.6, { y: 0 }, { y: -140 }, 'inout');
+tw('#s6', 22.8, 0.6, { o: 1 }, { o: 0 }, 'in');
+
+/* S7 — CTA */
+tw('#s7', 22.8, 0.6, { y: 1920 }, { y: 0 }, 'expo');
+tw('#s7eye', 23.3, 0.5, { o: 0, y: -20 }, { o: 1, y: 0 });
+tw('#s7h', 23.35, 0.8, { o: 0, y: 80 }, { o: 1, y: 0 }, 'expo');
+tw('#s7btn', 23.9, 0.6, { o: 0, s: .7 }, { o: 1, s: 1 }, 'back');
+tw('#s7url', 24.3, 0.5, { o: 0, y: 20 }, { o: 1, y: 0 });
+tw('#s7bio', 24.5, 0.5, { o: 0, y: 20 }, { o: 1, y: 0 });
+
+render(0);
+/* Browser preview: play when opened directly (the renderer drives render(t) itself). */
+if (!navigator.webdriver) {
+  const t0 = performance.now();
+  (function loop() { render(((performance.now() - t0) / 1000) % 27); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
